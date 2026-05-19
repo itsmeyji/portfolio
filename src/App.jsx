@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { projects } from './data/projects';
 
 const email = 'jungyunji031023@gmail.com';
@@ -23,29 +23,29 @@ function Header() {
 
 function Hero() {
   return (
-    <section id="home" className="section hero">
-      <div className="section-inner hero-grid">
-        <div>
+    <section id="home" className="hero">
+      <div className="hero-background" aria-hidden="true" />
+      <div className="section-inner hero-inner">
+        <div className="hero-content">
           <p className="eyebrow">Backend Developer Portfolio</p>
-          <h1>정윤지</h1>
-          <p className="role">백엔드 개발자를 목표로 성장하고 있습니다.</p>
+          <h1>
+            백엔드 개발자
+            <br />
+            정윤지입니다
+          </h1>
           <p className="hero-copy">
-            안정적인 서버 구조와 데이터 기반 문제 해결에 관심이 있으며, 배운 것을 실제 서비스로
-            연결하는 개발자가 되고 싶습니다.
+            자바 기반의 웹 백엔드 개발로
+            <br />
+            합리적이고 안정적인 구조의 서비스를 개발하고 있습니다
           </p>
           <div className="hero-links" aria-label="연락처 링크">
-            <a href={`mailto:${email}`}>{email}</a>
-            <a href={githubUrl} target="_blank" rel="noreferrer">
+            <a className="primary-link" href={githubUrl} target="_blank" rel="noreferrer">
               GitHub
             </a>
+            <a href={`mailto:${email}`}>E-mail</a>
           </div>
         </div>
-        <div className="profile-panel" aria-label="포트폴리오 요약">
-          <span>Java</span>
-          <span>Spring Boot</span>
-          <span>MySQL</span>
-          <span>Python</span>
-        </div>
+        <div className="hero-divider" />
       </div>
     </section>
   );
@@ -201,9 +201,11 @@ function Contact() {
         <p className="eyebrow">Contact</p>
         <h2>함께 성장할 기회를 기다리고 있습니다.</h2>
         <div className="contact-links">
-          <a href={`mailto:${email}`}>{email}</a>
+          <a className="primary-link" href={`mailto:${email}`}>
+            E-mail
+          </a>
           <a href={githubUrl} target="_blank" rel="noreferrer">
-            {githubUrl}
+            GitHub
           </a>
         </div>
       </div>

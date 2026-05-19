@@ -1,4 +1,4 @@
-export const projects = [
+﻿export const projects = [
   {
     title: 'Portfolio Website',
     summary: '개인 소개, 기술 스택, 프로젝트 경험을 한 페이지에서 확인할 수 있는 포트폴리오 사이트입니다.',

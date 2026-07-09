@@ -1,12 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { projects } from './data/projects';
 
 const email = 'jungyunji031023@gmail.com';
 const githubUrl = 'https://github.com/itsmeyji';
 
 function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setIsScrolled(scrollTop > 24);
+      setScrollProgress(docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="site-header">
+    <header className={`site-header ${isScrolled ? 'is-scrolled' : ''}`}>
       <a className="brand" href="#home" aria-label="첫 화면으로 이동">
         YJ
       </a>
@@ -17,12 +32,20 @@ function Header() {
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
       </nav>
+      <span className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden="true" />
     </header>
   );
 }
 
 function Hero() {
   const [emailCopied, setEmailCopied] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const copyEmail = async () => {
     try {
@@ -36,7 +59,7 @@ function Hero() {
 
   return (
     <section id="home" className="hero">
-      <div className="hero-background" aria-hidden="true" />
+      <div className={`hero-grid ${scrolled ? 'is-faded' : ''}`} aria-hidden="true" />
       <div className="section-inner hero-inner">
         <div className="hero-content">
           <p className="eyebrow">Backend Developer Portfolio</p>
@@ -59,6 +82,10 @@ function Hero() {
           </div>
         </div>
         <div className="hero-divider" />
+      </div>
+      <div className={`scroll-cue ${scrolled ? 'is-hidden' : ''}`} aria-hidden="true">
+        <span className="scroll-cue-line" />
+        <span className="scroll-cue-label">Scroll</span>
       </div>
     </section>
   );
@@ -97,7 +124,7 @@ function Skills() {
   ];
 
   return (
-    <section id="skills" className="section muted">
+    <section id="skills" className="section">
       <div className="section-inner">
         <p className="eyebrow">Skills</p>
         <div className="skill-grid">
@@ -120,7 +147,19 @@ function Skills() {
 }
 
 function Projects() {
-  const [openProject, setOpenProject] = useState(null);
+  const [openProjects, setOpenProjects] = useState(() => new Set());
+
+  const toggleProject = (index) => {
+    setOpenProjects((current) => {
+      const next = new Set(current);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
 
   return (
     <section id="projects" className="section">
@@ -133,11 +172,17 @@ function Projects() {
 
         <div className="project-grid">
           {projects.map((project, index) => {
-            const isOpen = openProject === index;
+            const isOpen = openProjects.has(index);
 
             return (
               <article className="project-card" key={project.title}>
-                <div className="project-card-head">
+                <div
+                  className="project-card-head"
+                  onClick={(event) => {
+                    if (event.target.closest('a')) return;
+                    toggleProject(index);
+                  }}
+                >
                   {project.logo && (
                     <img className="project-logo" src={project.logo} alt={`${project.title} logo`} />
                   )}
@@ -170,7 +215,7 @@ function Projects() {
                   type="button"
                   aria-label={`${project.title} 상세 보기`}
                   aria-expanded={isOpen}
-                  onClick={() => setOpenProject(isOpen ? null : index)}
+                  onClick={() => toggleProject(index)}
                 >
                   <span aria-hidden="true">{isOpen ? '−' : '+'}</span>
                 </button>
@@ -180,10 +225,10 @@ function Projects() {
                       <video className="project-demo" src={project.demo} controls preload="metadata" />
                     )}
                     <dl className="project-meta">
-                      {project.team && (
+                      {project.period && (
                         <div>
-                          <dt>참여 인원</dt>
-                          <dd>{project.team}</dd>
+                          <dt>개발 기간</dt>
+                          <dd>{project.period}</dd>
                         </div>
                       )}
                       {project.role && (
@@ -193,11 +238,34 @@ function Projects() {
                         </div>
                       )}
                     </dl>
-                    <ul>
-                      {project.details.map((detail) => (
-                        <li key={detail}>{detail}</li>
-                      ))}
-                    </ul>
+                    <div className="project-sections">
+                      {project.intro && (
+                        <section className="project-subsection">
+                          <h4>서비스 소개</h4>
+                          <p>{project.intro}</p>
+                        </section>
+                      )}
+                      {project.features && project.features.length > 0 && (
+                        <section className="project-subsection">
+                          <h4>주요 기능</h4>
+                          <ul>
+                            {project.features.map((feature) => (
+                              <li key={feature}>{feature}</li>
+                            ))}
+                          </ul>
+                        </section>
+                      )}
+                      {project.architecture && project.architecture.length > 0 && (
+                        <section className="project-subsection">
+                          <h4>아키텍처 특징</h4>
+                          <ul>
+                            {project.architecture.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </section>
+                      )}
+                    </div>
                     <div className="project-links">
                       {project.demo && (
                         <a href={project.demo} target="_blank" rel="noreferrer">
@@ -220,18 +288,19 @@ function Experience() {
   const education = [
     {
       title: '상명대학교',
-      period: '2023.03 ~ 현재 (휴학)',
+      period: '2023.03 ~ 현재 (4학년 1학기 재학)',
       descriptions: ['빅데이터융합전공 · 컴퓨터과학 복수전공'],
     },
   ];
 
   const activities = [
     {
-      title: '정보보호 연구실 산하 동아리 Pioneer',
+      title: '정보보호 연구회 Pioneer',
       period: '2023.03 ~ 현재',
       descriptions: [
-        '프로그래밍·웹보안 관련 세미나 및 미니 프로젝트 참여',
+        '프로그래밍·웹보안 관련 세미나 및 프로젝트 참여',
         '신입생 대상 기초 코딩 스터디 및 멘토링 진행',
+        '논문 보조 수행',
         { text: '⇗  Pioneer Information Security Lab', href: 'https://isl.smu.ac.kr/' },
       ],
     },
@@ -247,8 +316,8 @@ function Experience() {
       title: 'Biohealth Honors Program',
       period: '2025.01',
       descriptions: [
-        '네덜란드 "Fontys University of Applied Science"학생들과 글로벌 헬스케어 앱 구상 프로젝트 진행',
-        '난임 관리 어플로 Philips 본사 발표 및 현지 담당자/교수들과 피드백',
+        '네덜란드 Fontys University of Applied Science 와 협업하여 글로벌 헬스케어 앱 구상 프로젝트 진행',
+        '난임 관리 어플로 Philips 네덜란드 본사 영어 발표 및 현지 담당자/교수들과 피드백',
       ],
     },
     {
@@ -256,7 +325,7 @@ function Experience() {
       period: '2025.12 ~ 2026.01',
       descriptions: [
         '캐나다 밴쿠버 University of British Columbia 단기 어학연수 프로그램 참여',
-        '언어 교육 과정 이수',
+        '언어/문화 교육 과정 이수',
       ],
     },
   ];
@@ -285,7 +354,7 @@ function Experience() {
     ));
 
   return (
-    <section id="experience" className="section muted">
+    <section id="experience" className="section">
       <div className="section-inner experience-layout">
         <div>
           <p className="eyebrow">Experience / Activities</p>
@@ -320,7 +389,7 @@ function Contact() {
     <section id="contact" className="section contact">
       <div className="section-inner contact-box">
         <p className="eyebrow">Contact</p>
-        <h2>함께 성장할 기회를 기다리고 있습니다.</h2>
+        <h2>함께할 기회를 기다리고 있습니다.</h2>
         <div className="contact-links">
           <button className="primary-link" type="button" onClick={copyEmail} aria-label="이메일 주소 복사">
             {emailCopied ? '✓ Copied' : 'E-mail'}
@@ -340,11 +409,13 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
+        <div className="content-stack">
+          <About />
+          <Skills />
+          <Projects />
+          <Experience />
+          <Contact />
+        </div>
       </main>
       <a className="scroll-top" href="#home" aria-label="맨 위로 이동">
         ↑

@@ -28,7 +28,7 @@
     title: '자취 도우미',
     summary: '마이데이터 기반 소득·소비 분석과 지역 시세 데이터를 결합해 청년의 자취 가능 시점을 예측하는 AI 주거자금 설계 서비스.',
     period: '2026.07 ~ 2026.08',
-    role: '백엔드, 시뮬레이션 및 자금설계 기능, 자취 시작 가능 시점 예측 기능, DSR 기반 안전한도 설계 기능',
+    role: '아이디어 구상, 프론트엔드 설계, 백엔드 전반, 시뮬레이션 및 자금설계 기능, 자취 시작 가능 시점 예측 기능, DSR 기반 안전한도 설계 기능',
     stack: ['React', 'Spring Boot', 'MySQL', 'Perplexity API(Sonar)', '마이데이터/공공데이터 연동'],
     logo: '/assets/projects/kb-logo.png',
     demo: '/assets/projects/kb.mp4',

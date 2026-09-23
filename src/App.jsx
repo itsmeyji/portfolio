@@ -110,8 +110,11 @@ function About() {
 function Skills() {
   const skillGroups = [
     {
-      title: 'Backend',
-      items: ['Java', 'Spring Boot', 'MySQL', 'mongoDB'],
+      title: 'Web',
+      subGroups: [
+        { label: 'Backend', items: ['Java', 'Spring Boot', 'MySQL', 'mongoDB'] },
+        { label: 'Frontend', items: ['JavaScript', 'React', 'Vue'] },
+      ],
     },
     {
       title: 'Data / AI',
@@ -131,13 +134,30 @@ function Skills() {
           {skillGroups.map((group) => (
             <article className="skill-card" key={group.title}>
               <h3>{group.title}</h3>
-              <div className="tag-list">
-                {group.items.map((item) => (
-                  <span className="tag" key={item}>
-                    {item}
-                  </span>
-                ))}
-              </div>
+              {group.subGroups ? (
+                <div className="skill-subgroups">
+                  {group.subGroups.map((sub) => (
+                    <div className="skill-subgroup" key={sub.label}>
+                      <p className="skill-subgroup-label">{sub.label}</p>
+                      <div className="tag-list">
+                        {sub.items.map((item) => (
+                          <span className="tag" key={item}>
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="tag-list">
+                  {group.items.map((item) => (
+                    <span className="tag" key={item}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              )}
             </article>
           ))}
         </div>

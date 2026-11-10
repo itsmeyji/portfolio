@@ -62,15 +62,15 @@ function Hero() {
       <div className={`hero-grid ${scrolled ? 'is-faded' : ''}`} aria-hidden="true" />
       <div className="section-inner hero-inner">
         <div className="hero-content">
-          <p className="eyebrow">Backend Developer Portfolio</p>
+          <p className="eyebrow">Software Developer Portfolio</p>
           <h1 className="hero-title">
-            <span className="hero-title-role">백엔드 개발자</span>
+            <span className="hero-title-role">소프트웨어 개발자</span>
             <span>정윤지입니다</span>
           </h1>
           <p className="hero-copy">
-            자바 기반의 웹 백엔드 개발로
+            백엔드를 중심으로 프론트엔드, AI 연동, 배포 자동화까지
             <br />
-            합리적이고 안정적인 구조의 서비스를 개발하고 있습니다
+            서비스의 처음부터 운영까지 직접 만들고 있습니다
           </p>
           <div className="hero-links" aria-label="연락처 링크">
             <a className="primary-link" href={githubUrl} target="_blank" rel="noreferrer">
@@ -99,9 +99,9 @@ function About() {
           <h2>배움을 멈추지 않는 개발자</h2>
         </div>
         <div className="lead about-copy">
-          <p>여러 프로젝트를 진행하며 아이디어가 실제 서비스로 구현되는 경험을 통해 개발의 매력에 빠지게 되었고,</p>
-          <p>특히 서비스 규모가 커질수록 이를 안정적으로 지탱하는 백엔드 구조의 중요성을 체감했습니다.</p>
-          <p>단순 기능의 구현을 넘어 안정성과 확장성을 고려한 아키텍처에 관심을 가지며 백엔드 역량을 깊이 있게 키워왔습니다.</p>
+          <p>아이디어가 실제 서비스로 구현되는 경험을 통해 개발의 매력에 빠졌습니다.</p>
+          <p>안정적인 백엔드 구조를 기반으로, 문제에 따라 프론트엔드 구현과 LLM 연동, 배포 자동화까지 필요한 기술을 직접 익혀 적용해 왔습니다.</p>
+          <p>기능 구현에 그치지 않고, 서비스가 실제로 운영되고 개선되는 과정까지 함께 고민합니다.</p>
         </div>
       </div>
     </section>
@@ -112,17 +112,21 @@ function Skills() {
     {
       title: 'Web',
       subGroups: [
-        { label: 'Backend', items: ['Java', 'Spring Boot', 'MySQL', 'mongoDB'] },
-        { label: 'Frontend', items: ['JavaScript', 'React', 'Vue'] },
+        { label: 'Backend', items: ['Java', 'Spring Boot', 'Spring Security', 'JPA', 'WebSocket', 'FastAPI'] },
+        { label: 'Database', items: ['PostgreSQL', 'MySQL', 'Redis', 'Supabase'] },
+        { label: 'Frontend', items: ['TypeScript', 'React'] },
       ],
     },
     {
       title: 'Data / AI',
-      items: ['Python', 'Pandas', 'TensorFlow'],
+      subGroups: [
+        { label: 'Data', items: ['Python', 'Pandas', 'Excel'] },
+        { label: 'LLM API', items: ['ChatGPT API', 'Perplexity API', 'Claude API'] },
+      ],
     },
     {
       title: 'Infra / Tools',
-      items: ['Docker', 'Git', 'Naver Cloud', 'AWS'],
+      items: ['Docker', 'GitHub Actions', 'Git', 'Vercel', 'Render', 'Naver Cloud', 'AWS', 'Jira'],
     },
   ];
 
@@ -215,6 +219,11 @@ function Projects() {
                           GitHub
                         </a>
                       )}
+                      {project.demo && (
+                        <a className="project-site" href={project.demo} target="_blank" rel="noreferrer">
+                          Demo
+                        </a>
+                      )}
                       {project.site && (
                         <a className="project-site" href={project.site} target="_blank" rel="noreferrer">
                           Site
@@ -286,13 +295,6 @@ function Projects() {
                         </section>
                       )}
                     </div>
-                    <div className="project-links">
-                      {project.demo && (
-                        <a href={project.demo} target="_blank" rel="noreferrer">
-                          Demo
-                        </a>
-                      )}
-                    </div>
                   </div>
                 </div>
               </article>
@@ -334,7 +336,7 @@ function Experience() {
     },
     {
       title: 'Biohealth Honors Program',
-      period: '2025.01',
+      period: '2024.08 ~ 2025.01',
       descriptions: [
         '네덜란드 Fontys University of Applied Science 와 협업하여 글로벌 헬스케어 앱 구상 프로젝트 진행',
         '난임 관리 어플로 Philips 네덜란드 본사 영어 발표 및 현지 담당자/교수들과 피드백',
@@ -342,10 +344,19 @@ function Experience() {
     },
     {
       title: 'UBC 계절 어학연수 프로그램',
-      period: '2025.12 ~ 2026.01',
+      period: '2025.12 ~ 2026.02',
       descriptions: [
         '캐나다 밴쿠버 University of British Columbia 단기 어학연수 프로그램 참여',
         '언어/문화 교육 과정 이수',
+      ],
+    },
+    {
+      title: '연합 헬스케어 창업동아리 메디럭스',
+      period: '2026.09 ~ 현재',
+      descriptions: [
+        '메디컬 도메인 연합 창업동아리 활동',
+        '창업, 사업 관련 강의 수강 및 프로젝트 개발팀으로 참여',
+        '초기창업 팀 바이오애슬릭 결성',
       ],
     },
   ];

@@ -250,6 +250,9 @@ function Projects() {
                 </button>
                 <div className={`project-detail ${isOpen ? 'is-open' : ''}`}>
                   <div className="project-detail-inner">
+                    {project.screenshot && (
+                      <img className="project-screenshot" src={project.screenshot} alt={`${project.title} 화면 예시`} loading="lazy" />
+                    )}
                     {project.demo && (
                       <video className="project-demo" src={project.demo} controls preload="metadata" />
                     )}

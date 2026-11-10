@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 import { projects } from './data/projects';
+import { enActivities, enEducation, enProjects } from './data/en';
+
+const isEn = new URLSearchParams(window.location.search).get('lang') === 'en';
+const t = (ko, en) => (isEn ? en : ko);
+const localizedProjects = isEn ? projects.map((project) => ({ ...project, ...enProjects[project.title] })) : projects;
+if (isEn) document.documentElement.lang = 'en';
 
 const email = 'jungyunji031023@gmail.com';
 const githubUrl = 'https://github.com/itsmeyji';
@@ -22,15 +28,18 @@ function Header() {
 
   return (
     <header className={`site-header ${isScrolled ? 'is-scrolled' : ''}`}>
-      <a className="brand" href="#home" aria-label="첫 화면으로 이동">
+      <a className="brand" href="#home" aria-label={t('첫 화면으로 이동', 'Go to top')}>
         YJ
       </a>
-      <nav className="nav" aria-label="주요 섹션">
+      <nav className="nav" aria-label={t('주요 섹션', 'Main sections')}>
         <a href="#about">About</a>
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
+        <a href={isEn ? '/' : '/?lang=en'} aria-label={t('영문 페이지로 이동', 'View in Korean')}>
+          {t('EN', 'KO')}
+        </a>
       </nav>
       <span className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden="true" />
     </header>
@@ -64,19 +73,19 @@ function Hero() {
         <div className="hero-content">
           <p className="eyebrow">Software Developer Portfolio</p>
           <h1 className="hero-title">
-            <span className="hero-title-role">소프트웨어 개발자</span>
-            <span>정윤지입니다</span>
+            <span className="hero-title-role">{t('소프트웨어 개발자', 'Software Developer')}</span>
+            <span>{t('정윤지입니다', 'Yunji Jung')}</span>
           </h1>
           <p className="hero-copy">
-            백엔드를 중심으로 프론트엔드, AI 연동, 배포 자동화까지
+            {t('백엔드를 중심으로 프론트엔드, AI 연동, 배포 자동화까지', 'Centered on backend development, extending to frontend, AI integration, and deployment automation,')}
             <br />
-            서비스의 처음부터 운영까지 직접 만들고 있습니다
+            {t('서비스의 처음부터 운영까지 직접 만들고 있습니다', 'I build services myself from the very start through operation.')}
           </p>
-          <div className="hero-links" aria-label="연락처 링크">
+          <div className="hero-links" aria-label={t('연락처 링크', 'Contact links')}>
             <a className="primary-link" href={githubUrl} target="_blank" rel="noreferrer">
               GitHub
             </a>
-            <button type="button" onClick={copyEmail} aria-label="이메일 주소 복사">
+            <button type="button" onClick={copyEmail} aria-label={t('이메일 주소 복사', 'Copy email address')}>
               {emailCopied ? '✓ Copied' : 'E-mail'}
             </button>
           </div>
@@ -96,12 +105,12 @@ function About() {
       <div className="section-inner two-column about-grid">
         <div className="about-heading">
           <p className="eyebrow">About</p>
-          <h2>배움을 멈추지 않는 개발자</h2>
+          <h2>{t('배움을 멈추지 않는 개발자', 'A developer who never stops learning')}</h2>
         </div>
         <div className="lead about-copy">
-          <p>아이디어가 실제 서비스로 구현되는 경험을 통해 개발의 매력에 빠졌습니다.</p>
-          <p>안정적인 백엔드 구조를 기반으로, 문제에 따라 프론트엔드 구현과 LLM 연동, 배포 자동화까지 필요한 기술을 직접 익혀 적용해 왔습니다.</p>
-          <p>기능 구현에 그치지 않고, 서비스가 실제로 운영되고 개선되는 과정까지 함께 고민합니다.</p>
+          <p>{t('아이디어가 실제 서비스로 구현되는 경험을 통해 개발의 매력에 빠졌습니다.', 'I fell in love with development by seeing ideas become real services.')}</p>
+          <p>{t('안정적인 백엔드 구조를 기반으로, 문제에 따라 프론트엔드 구현과 LLM 연동, 배포 자동화까지 필요한 기술을 직접 익혀 적용해 왔습니다.', 'Building on a stable backend architecture, I have learned and applied whatever each problem requires, including frontend implementation, LLM integration, and deployment automation.')}</p>
+          <p>{t('기능 구현에 그치지 않고, 서비스가 실제로 운영되고 개선되는 과정까지 함께 고민합니다.', 'Beyond implementing features, I also think about how a service is actually operated and improved.')}</p>
         </div>
       </div>
     </section>
@@ -195,7 +204,7 @@ function Projects() {
         </div>
 
         <div className="project-grid">
-          {projects.map((project, index) => {
+          {localizedProjects.map((project, index) => {
             const isOpen = openProjects.has(index);
 
             return (
@@ -242,7 +251,7 @@ function Projects() {
                 <button
                   className="project-toggle"
                   type="button"
-                  aria-label={`${project.title} 상세 보기`}
+                  aria-label={t(`${project.title} 상세 보기`, `View ${project.title} details`)}
                   aria-expanded={isOpen}
                   onClick={() => toggleProject(index)}
                 >
@@ -251,7 +260,7 @@ function Projects() {
                 <div className={`project-detail ${isOpen ? 'is-open' : ''}`}>
                   <div className="project-detail-inner">
                     {project.screenshot && (
-                      <img className="project-screenshot" src={project.screenshot} alt={`${project.title} 화면 예시`} loading="lazy" />
+                      <img className="project-screenshot" src={project.screenshot} alt={t(`${project.title} 화면 예시`, `${project.title} screenshots`)} loading="lazy" />
                     )}
                     {project.demo && (
                       <video className="project-demo" src={project.demo} controls preload="metadata" />
@@ -259,13 +268,13 @@ function Projects() {
                     <dl className="project-meta">
                       {project.period && (
                         <div>
-                          <dt>개발 기간</dt>
+                          <dt>{t('개발 기간', 'Period')}</dt>
                           <dd>{project.period}</dd>
                         </div>
                       )}
                       {project.role && (
                         <div>
-                          <dt>나의 역할</dt>
+                          <dt>{t('나의 역할', 'My Role')}</dt>
                           <dd>{project.role}</dd>
                         </div>
                       )}
@@ -273,13 +282,13 @@ function Projects() {
                     <div className="project-sections">
                       {project.intro && (
                         <section className="project-subsection">
-                          <h4>서비스 소개</h4>
+                          <h4>{t('서비스 소개', 'Overview')}</h4>
                           <p>{project.intro}</p>
                         </section>
                       )}
                       {project.features && project.features.length > 0 && (
                         <section className="project-subsection">
-                          <h4>주요 기능</h4>
+                          <h4>{t('주요 기능', 'Key Features')}</h4>
                           <ul>
                             {project.features.map((feature) => (
                               <li key={feature}>{feature}</li>
@@ -289,7 +298,7 @@ function Projects() {
                       )}
                       {project.architecture && project.architecture.length > 0 && (
                         <section className="project-subsection">
-                          <h4>아키텍처 특징</h4>
+                          <h4>{t('아키텍처 특징', 'Architecture')}</h4>
                           <ul>
                             {project.architecture.map((item) => (
                               <li key={item}>{item}</li>
@@ -310,7 +319,7 @@ function Projects() {
 }
 
 function Experience() {
-  const education = [
+  const education = isEn ? enEducation : [
     {
       title: '상명대학교',
       period: '2023.03 ~ 현재 (4학년 1학기 재학)',
@@ -318,7 +327,7 @@ function Experience() {
     },
   ];
 
-  const activities = [
+  const activities = isEn ? enActivities : [
     {
       title: '정보보호 연구회 Pioneer',
       period: '2023.03 ~ 현재',
@@ -354,7 +363,7 @@ function Experience() {
       ],
     },
     {
-      title: '연합 헬스케어 창업동아리 메디럭스',
+      title: '연합 헬스케어 창업동아리 Medilux',
       period: '2026.09 ~ 현재',
       descriptions: [
         '메디컬 도메인 연합 창업동아리 활동',
@@ -423,9 +432,9 @@ function Contact() {
     <section id="contact" className="section contact">
       <div className="section-inner contact-box">
         <p className="eyebrow">Contact</p>
-        <h2>함께할 기회를 기다리고 있습니다.</h2>
+        <h2>{t('함께할 기회를 기다리고 있습니다.', 'I look forward to the opportunity to work together.')}</h2>
         <div className="contact-links">
-          <button className="primary-link" type="button" onClick={copyEmail} aria-label="이메일 주소 복사">
+          <button className="primary-link" type="button" onClick={copyEmail} aria-label={t('이메일 주소 복사', 'Copy email address')}>
             {emailCopied ? '✓ Copied' : 'E-mail'}
           </button>
           <a href={githubUrl} target="_blank" rel="noreferrer">
@@ -451,7 +460,7 @@ function App() {
           <Contact />
         </div>
       </main>
-      <a className="scroll-top" href="#home" aria-label="맨 위로 이동">
+      <a className="scroll-top" href="#home" aria-label={t('맨 위로 이동', 'Back to top')}>
         ↑
       </a>
     </>

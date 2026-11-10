@@ -190,6 +190,29 @@ h3 {
   width: 100%;
 }
 
+.lang-toggle {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.nav .lang-toggle a {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.nav .lang-toggle a::after {
+  display: none;
+}
+
+.nav .lang-toggle a[aria-current='true'] {
+  color: #fff;
+  background: var(--accent);
+}
+
 /* ---------- Layout primitives ---------- */
 
 .section,

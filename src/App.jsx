@@ -37,9 +37,14 @@ function Header() {
         <a href="#projects">Projects</a>
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
-        <a href={isEn ? '/' : '/?lang=en'} aria-label={t('영문 페이지로 이동', 'View in Korean')}>
-          {t('EN', 'KO')}
-        </a>
+        <div className="lang-toggle" role="group" aria-label={t('언어 선택', 'Language')}>
+          <a href="/" aria-label="한국어" aria-current={isEn ? undefined : 'true'}>
+            KO
+          </a>
+          <a href="/?lang=en" aria-label="English" aria-current={isEn ? 'true' : undefined}>
+            EN
+          </a>
+        </div>
       </nav>
       <span className="scroll-progress" style={{ width: `${scrollProgress}%` }} aria-hidden="true" />
     </header>
